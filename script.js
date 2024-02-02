@@ -69,7 +69,7 @@ const setupAccountModal = (user) => {
   if (user) {
     accountModal.innerHTML = `
       <p>Logged in as</p>
-      <p><strong>${user.email.split('@')[0]}</strong></p>`
+      <p><strong>${user.email}</strong></p>`
   } else {
     accountModal.innerHTML = ''
   }
