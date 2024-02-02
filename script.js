@@ -221,12 +221,9 @@ const saveLocal = () => {
 }
 
 const restoreLocal = () => {
-  const books = JSON.parse(localStorage.getItem('library'))
-  if (books) {
-    library.books = books.map((book) => JSONToBook(book))
-  } else {
-    library.books = []
-  }
+  library.books = JSON.parse(localStorage.getItem('library')).map((book) =>
+    JSONToBook(book)
+  )
 }
 
 // Auth
