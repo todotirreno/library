@@ -1,3 +1,5 @@
+// TODO - firestore rules
+
 // Data Structures
 
 class Book {
@@ -20,9 +22,11 @@ class Library {
   }
 
   addBook(newBook) {
-    if (!this.isInLibrary(newBook)) {
-      this.books.push(newBook)
-    }
+    if (this.books.some((book) => book.title === newBook.title)) return false
+    if (!(newBook instanceof Book)) return false
+
+    this.books.push(newBook)
+    return true
   }
 
   removeBook(title) {
@@ -31,10 +35,6 @@ class Library {
 
   getBook(title) {
     return this.books.find((book) => book.title === title)
-  }
-
-  isInLibrary(newBook) {
-    return this.books.some((book) => book.title === newBook.title)
   }
 }
 
@@ -46,7 +46,6 @@ const accountBtn = document.getElementById('accountBtn')
 const accountModal = document.getElementById('accountModal')
 const addBookBtn = document.getElementById('addBookBtn')
 const addBookModal = document.getElementById('addBookModal')
-const errorMsg = document.getElementById('errorMsg')
 const overlay = document.getElementById('overlay')
 const addBookForm = document.getElementById('addBookForm')
 const booksGrid = document.getElementById('booksGrid')
@@ -84,8 +83,6 @@ const openAddBookModal = () => {
 const closeAddBookModal = () => {
   addBookModal.classList.remove('active')
   overlay.classList.remove('active')
-  errorMsg.classList.remove('active')
-  errorMsg.textContent = ''
 }
 
 const openAccountModal = () => {
@@ -165,22 +162,19 @@ const getBookFromInput = () => {
 const addBook = (e) => {
   e.preventDefault()
   const newBook = getBookFromInput()
+  const success = library.addBook(newBook)
 
-  if (library.isInLibrary(newBook)) {
-    errorMsg.textContent = 'This book already exists in your library'
-    errorMsg.classList.add('active')
-    return
-  }
-
-  if (auth.currentUser) {
-    addBookDB(newBook)
+  if (success) {
+    if (auth.currentUser) {
+      addBookDB(newBook)
+    } else {
+      saveLocal()
+      updateBooksGrid()
+    }
+    closeAddBookModal()
   } else {
-    library.addBook(newBook)
-    saveLocal()
-    updateBooksGrid()
+    alert('This book already exists in your library')
   }
-
-  closeAddBookModal()
 }
 
 const removeBook = (e) => {
@@ -226,7 +220,7 @@ const restoreLocal = () => {
   )
 }
 
-// Auth
+// Firebase Auth
 
 const auth = firebase.auth()
 const logInBtn = document.getElementById('logInBtn')
@@ -256,7 +250,7 @@ const signOut = () => {
 logInBtn.onclick = signIn
 logOutBtn.onclick = signOut
 
-// Firestore
+// Firebase Firestore
 
 const db = firebase.firestore()
 let unsubscribe
@@ -265,7 +259,7 @@ const setupRealTimeListener = () => {
   unsubscribe = db
     .collection('books')
     .where('ownerId', '==', auth.currentUser.uid)
-    .orderBy('createdAt')
+    .orderBy('title')
     .onSnapshot((snapshot) => {
       library.books = docsToBooks(snapshot.docs)
       updateBooksGrid()
@@ -322,6 +316,5 @@ const bookToDoc = (book) => {
     author: book.author,
     pages: book.pages,
     isRead: book.isRead,
-    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
   }
 }
