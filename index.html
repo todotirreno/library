@@ -14,27 +14,15 @@
   </head>
   <body>
     <header class="header">
-      <div class="header__container">
-        <h1 class="header__title">Library</h1>
-        <div id="whenSignedOut">
-          <button class="btn btn--default btn-sign-in" id="signInBtn">
-            Sign in
-          </button>
-        </div>
-        <div id="whenSignedIn">
-          <button class="btn btn--default btn-sign-out" id="signOutBtn">
-            Sign out
-          </button>
-        </div>
-      </div>
+      <h1 class="header__title">Library</h1>
     </header>
     <main class="main">
-      <button class="btn btn--green btn--large" id="addBookBtn">
-        Add book
+      <button class="btn btn--green btn--large" id="newBookBtn">
+        New book
       </button>
       <div class="books-grid" id="booksGrid"></div>
     </main>
-    <div class="popup" id="addBookPopup">
+    <div class="popup" id="newBookPopup">
       <form class="popup__form" id="popupForm">
         <h3 class="popup__big-title">Add new book</h3>
         <input
@@ -67,10 +55,8 @@
     </div>
     <div class="popup" id="storagePopup">
       <p class="popup__title">Choose storage type</p>
-      <button class="btn btn--default" id="localStorageBtn">
-        Local Storage
-      </button>
-      <button class="btn btn--default" id="googleCloudBtn">Google Cloud</button>
+      <button class="btn" id="localStorageBtn">Local Storage</button>
+      <button class="btn" id="googleCloudBtn">Google Cloud</button>
     </div>
     <div class="overlay" id="overlay"></div>
 

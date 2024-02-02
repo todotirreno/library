@@ -34,43 +34,40 @@ function getBook(bookTitle) {
   return library.find((book) => book.title === bookTitle)
 }
 
-// ADD BOOK POPUP
+// NEW BOOK POPUP
 
-const addBookBtn = document.getElementById('addBookBtn')
-const addBookPopup = document.getElementById('addBookPopup')
+const newBookBtn = document.getElementById('newBookBtn')
+const newBookPopup = document.getElementById('newBookPopup')
 const overlay = document.getElementById('overlay')
 
-addBookBtn.onclick = openAddBookPopup
+newBookBtn.addEventListener('click', openNewBookPopup)
+overlay.addEventListener('click', closeNewBookPopup)
 
-function openAddBookPopup() {
+window.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') closeNewBookPopup()
+})
+
+function openNewBookPopup() {
   form.reset()
-  addBookPopup.classList.add('popup--active')
+  newBookPopup.classList.add('popup--active')
   overlay.classList.add('overlay--active')
-  setupOverlayListeners()
 }
 
-function setupOverlayListeners() {
-  overlay.onclick = closeAddBookPopup
-  window.onkeydown = (e) => {
-    if (e.key === 'Escape') closeAddBookPopup()
-  }
-}
-
-function closeAddBookPopup() {
-  addBookPopup.classList.remove('popup--active')
+function closeNewBookPopup() {
+  newBookPopup.classList.remove('popup--active')
   overlay.classList.remove('overlay--active')
 }
 
 // FORM
 
 const form = document.getElementById('popupForm')
-form.onsubmit = addBook
+form.addEventListener('submit', addBook)
 
 function addBook(e) {
   e.preventDefault()
   if (addToLibrary(getBookFromInput())) {
     updateBooksGrid()
-    closeAddBookPopup()
+    closeNewBookPopup()
   } else {
     alert('This book already exists in your library')
   }
@@ -165,8 +162,8 @@ let storageType = ''
 const storagePopup = document.getElementById('storagePopup')
 const localStorageBtn = document.getElementById('localStorageBtn')
 const googleCloudBtn = document.getElementById('googleCloudBtn')
-localStorageBtn.onclick = setStorageTypeLocal
-googleCloudBtn.onclick = setStorageTypeGoogle
+localStorageBtn.addEventListener('click', setStorageTypeLocal)
+googleCloudBtn.addEventListener('click', setStorageTypeGoogle)
 
 function openStoragePopup() {
   storagePopup.classList.add('popup--active')
@@ -181,7 +178,6 @@ function closeStoragePopup() {
 function setStorageTypeLocal() {
   storageType = 'localStorage'
   closeStoragePopup()
-  setupOverlayListeners()
   restore()
 }
 
@@ -189,7 +185,6 @@ function setStorageTypeGoogle() {
   storageType = 'googleCloud'
   // after log in
   closeStoragePopup()
-  setupOverlayListeners()
   restore()
 }
 
@@ -202,24 +197,6 @@ function restore() {
 }
 
 // FIREBASE
-
-const whenSignedIn = document.getElementById('whenSignedIn')
-const whenSignedOut = document.getElementById('whenSignedOut')
-whenSignedIn.hidden = true
-
-const signInBtn = document.getElementById('signInBtn')
-const signOutBtn = document.getElementById('signOutBtn')
-
-const auth = firebase.auth()
-const provider = new firebase.auth.GoogleAuthProvider()
-
-signInBtn.onclick = () => auth.signInWithPopup(provider)
-
-function authUser() {}
-
-function saveFirebase() {}
-
-function resotreFirebase() {}
 
 // LOCAL STORAGE
 
