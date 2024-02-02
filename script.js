@@ -120,17 +120,16 @@ const resetBooksGrid = () => {
 
 const createBookCard = (book) => {
   const bookCard = document.createElement('div')
-  const title = document.createElement('p')
-  const author = document.createElement('p')
-  const pages = document.createElement('p')
-  const buttonGroup = document.createElement('div')
+  const title = document.createElement('h3')
+  const author = document.createElement('h3')
+  const pages = document.createElement('h3')
   const readBtn = document.createElement('button')
   const removeBtn = document.createElement('button')
 
   bookCard.classList.add('book-card')
-  buttonGroup.classList.add('button-group')
   readBtn.classList.add('btn')
   removeBtn.classList.add('btn')
+  removeBtn.classList.add('btn-red')
   readBtn.onclick = toggleRead
   removeBtn.onclick = removeBook
 
@@ -150,9 +149,8 @@ const createBookCard = (book) => {
   bookCard.appendChild(title)
   bookCard.appendChild(author)
   bookCard.appendChild(pages)
-  buttonGroup.appendChild(readBtn)
-  buttonGroup.appendChild(removeBtn)
-  bookCard.appendChild(buttonGroup)
+  bookCard.appendChild(readBtn)
+  bookCard.appendChild(removeBtn)
   booksGrid.appendChild(bookCard)
 }
 
@@ -186,10 +184,7 @@ const addBook = (e) => {
 }
 
 const removeBook = (e) => {
-  const title = e.target.parentNode.parentNode.firstChild.innerHTML.replaceAll(
-    '"',
-    ''
-  )
+  const title = e.target.parentNode.firstChild.innerHTML.replaceAll('"', '')
 
   if (auth.currentUser) {
     removeBookDB(title)
@@ -201,10 +196,7 @@ const removeBook = (e) => {
 }
 
 const toggleRead = (e) => {
-  const title = e.target.parentNode.parentNode.firstChild.innerHTML.replaceAll(
-    '"',
-    ''
-  )
+  const title = e.target.parentNode.firstChild.innerHTML.replaceAll('"', '')
   const book = library.getBook(title)
 
   if (auth.currentUser) {
