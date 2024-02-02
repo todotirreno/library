@@ -219,7 +219,7 @@ function authUser() {}
 
 function saveFirebase() {}
 
-function restoreFirebase() {}
+function resotreFirebase() {}
 
 // LOCAL STORAGE
 
