@@ -17,8 +17,8 @@
   --btn-light-red: #ffe8e8;
   --btn-light-red-hover: #eed7d7;
   --btn-light-red-active: #ddc6c6;
-  --modal: #d6e0f0;
-  --modal-border: #282a33;
+  --popup: #d6e0f0;
+  --popup-border: #282a33;
 }
 
 *,
@@ -211,24 +211,24 @@ input {
   background-color: var(--btn-light-red-active);
 }
 
-/* ADD BOOK MODAL */
+/* POPUP */
 
-.modal {
+.add-book-popup {
   position: fixed;
   z-index: 1;
   top: 50%;
   left: 50%;
   min-width: 300px;
   padding: 3rem;
-  border: 2px solid var(--modal-border);
+  border: 2px solid var(--popup-border);
   border-radius: 10px;
-  background-color: var(--modal);
+  background-color: var(--popup);
   text-align: center;
   transform: translate(-50%, -50%) scale(0);
   transition: 200ms ease-in-out;
 }
 
-.modal.active {
+.add-book-popup.active {
   transform: translate(-50%, -50%) scale(1);
 }
 
