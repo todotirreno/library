@@ -1,61 +1,51 @@
-// class Book {
-//   constructor(
-//     title = "Unknown",
-//     author = "Unknown",
-//     pages = "0",
-//     isRead = false
-//   ) {
-//     this.title = title;
-//     this.author = author;
-//     this.pages = pages;
-//     this.isRead = isRead;
-//   }
+class Book {
+  constructor(
+    title = "Unknown",
+    author = "Unknown",
+    pages = "0",
+    isRead = false
+  ) {
+    this.title = title;
+    this.author = author;
+    this.pages = pages;
+    this.isRead = isRead;
+  }
 
-//   setRead(isRead) {
-//     this.isRead = isRead;
-//   }
-// }
+  setRead(isRead) {
+    this.isRead = isRead;
+  }
+}
 
 // BOOK CLASS
 
-function Book(
-  title = "Unknown",
-  author = "Unknown",
-  pages = "0",
-  isRead = "false"
-) {
-  this.title = title;
-  this.author = author;
-  this.pages = pages;
-  this.isRead = isRead;
-}
-
-Book.prototype.setRead = function (isRead) {
-  this.isRead = isRead;
-};
-
 // BOOKS ARRAY
 
-let myLibrary = [];
-
-function addToLibrary(newBook) {
-  if (myLibrary.some((book) => book.title === newBook.title)) return false;
-  myLibrary.push(newBook);
-  return true;
-}
-
-function removeFromLibrary(bookTitle) {
-  myLibrary = myLibrary.filter((book) => book.title !== bookTitle);
-}
-
-function getBook(bookTitle) {
-  for (book of myLibrary) {
-    if (book.title === bookTitle) {
-      return book;
-    }
+class Library {
+  books;
+  constructor() {
+    this.books = [];
   }
-  return null;
+
+  add(newBook) {
+    if (this.books.some((book) => book.title === newBook.title)) return false;
+    this.books.push(newBook);
+    return true;
+  }
+
+  remove(title) {
+    this.books = this.books.filter((book) => book.title !== title);
+  }
+
+  find(title) {
+    return this.books.find((book) => book.title === title);
+  }
+
+  get books() {
+    return [...this.books];
+  }
 }
+// let myLibrary = [];
+const myLibrary = new Library();
 
 // POPUP
 
@@ -88,7 +78,7 @@ form.addEventListener("submit", addBook);
 
 function addBook(e) {
   e.preventDefault();
-  if (addToLibrary(getBookFromInput())) {
+  if (myLibrary.add(getBookFromInput())) {
     updateBooksGrid();
     closePopup();
   } else {
@@ -111,7 +101,7 @@ booksGrid.addEventListener("click", checkBooksGridInput);
 
 function updateBooksGrid() {
   resetGrid();
-  for (let element of myLibrary) {
+  for (let element of myLibrary.books) {
     createBookCard(element);
   }
 }
@@ -161,16 +151,16 @@ function createBookCard(book) {
 
 function checkBooksGridInput(e) {
   if (e.target.classList.contains("js-remove-button")) {
-    removeFromLibrary(e.target.parentNode.firstChild.innerHTML);
+    myLibrary.remove(e.target.parentNode.firstChild.innerHTML);
     e.target.parentNode.parentNode.removeChild(e.target.parentNode);
   } else if (e.target.classList.contains("js-is-read-button")) {
     if (e.target.innerHTML === "Read") {
-      getBook(e.target.parentNode.firstChild.innerHTML).setRead(false);
+      myLibrary.find(e.target.parentNode.firstChild.innerHTML).setRead(false);
       e.target.innerHTML = "Not read";
       e.target.classList.remove("button--light-green");
       e.target.classList.add("button--light-red");
     } else {
-      getBook(e.target.parentNode.firstChild.innerHTML).setRead(true);
+      myLibrary.find(e.target.parentNode.firstChild.innerHTML).setRead(true);
       e.target.innerHTML = "Read";
       e.target.classList.remove("button--light-red");
       e.target.classList.add("button--light-green");
